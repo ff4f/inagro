@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_asset_move_form" model="ir.ui.view">
+		<field name="name">asset.move.form</field>
+		<field name="model">asset.move</field>
+		<field name="arch" type="xml">
+			<form string="Asset Move">
+				<header>
+					<button name="action_move" states="draft" type="object"
+						string="Move" class="oe_highlight"  />
+					<button name="action_cancel" states="draft" type="object"
+						string="Cancel"/>
+					<field name="state" widget="statusbar"
+						statusbar_visible="draft,done,cancel" />
+				</header>
+				<sheet>
+					<div class="oe_title">
+						<h1>
+							<field name="name" readonly="1" />
+						</h1>
+					</div>
+					<group>
+						<field name="from_loc_id"
+							attrs="{'readonly': [('state', '=', 'done')]}" />
+						<field name="asset_id" required="1" 
+							domain="[('location_asset_id', '=', from_loc_id),('state','=','open')]" 
+							attrs="{'readonly': [('state', '!=', 'draft')]}" />
+					</group>
+					<group>
+						<field name="to_loc_id"
+							attrs="{'readonly': [('state', '!=', 'draft')],'required':[('state', '!=', 'draft')]}" />
+							<field name="move_date" readonly="1"/>
+							<field name="qr_code" widget='image' class="oe_avatar"/>
+					</group>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" />
+					<field name="activity_ids" widget="mail_activity" />
+					<field name="message_ids" widget="mail_thread" />
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_asset_move_tree" model="ir.ui.view">
+		<field name="name">asset.move.tree</field>
+		<field name="model">asset.move</field>
+		<field name="arch" type="xml">
+			<tree string="Asset Move">
+				<field name="name" />
+				<field name="asset_id" />
+				<field name="move_date" />
+				<field name="to_loc_id" string ="Destination Location"/>
+				<field name="state" />
+			</tree>
+		</field>
+	</record>
+
+
+	<record id="asset_move_search" model="ir.ui.view">
+		<field name="name">asset.move.search</field>
+		<field name="model">asset.move</field>
+		<field name="arch" type="xml">
+			<search string="Asset Move">
+				<field name="name" />
+				<field name="asset_id" />
+				<field name="from_loc_id" />				
+				<field name="to_loc_id" />
+			</search>
+		</field>
+	</record>
+
+	<record id="action_asset_move" model="ir.actions.act_window">
+		<field name="name">Asset Move</field>
+		<field name="res_model">asset.move</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="asset_move_search" />
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+				Create Asset Move for the Company
+			</p>
+		</field>
+	</record>
+
+	<menuitem action="action_asset_move" name="Asset Move"
+		id="menu_action_asset_move" parent="account.menu_finance_entries_management"
+		sequence="12" />
+
+
+
+</odoo>

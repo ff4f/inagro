@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+account_asset_location,group_account_asset_location,model_asset_location,account.group_account_user,1,1,1,1
+account_asset_move,group_account_asset_move,model_asset_move,account.group_account_user,1,1,1,1
+billing_asset_location,group_user_billing_asset_location,model_asset_location,account.group_account_invoice,1,0,0,0
+billing_asset_move,group_billing_asset_move,model_asset_move,account.group_account_invoice,1,1,1,0

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="inagro_filter_mrp_stock_picking" model="ir.rule">
+            <field name="name">Inagro filter MRP and stock picking</field>
+            <field name="model_id" search="[('model','=','mrp.bom')]" model="ir.model"/>
+            <field name="groups" eval="[(4, ref('mrp.group_mrp_user'))]"/>
+            <field name="domain_force">[('picking_id', 'in', [ p.id for p in user.warehouse_ids ])]</field>
+        </record>
+        
+        <record model="ir.rule" id="inagro_filter_mrp_production">
+			<field name="name">Inagro filter MRP Production</field>
+			<field name="model_id" search="[('model','=','mrp.production')]" model="ir.model"/>
+			<field name="groups" eval="[(4, ref('mrp.group_mrp_user'))]"/>
+			<field name="domain_force">[('picking_type_id', 'in', [ p.id for p in user.warehouse_ids ])]</field>
+		</record>
+
+        <record model="ir.rule" id="inagro_filter_mrp_unbuild_order">
+            <field name="name">Inagro filter MRP Unbuild Order</field>
+            <field name="model_id" search="[('model','=','mrp.unbuild')]" model="ir.model"/>
+            <field name="groups" eval="[(4, ref('mrp.group_mrp_user'))]"/>
+            <field name="domain_force">['|', ('location_id', 'in', [ p.id for p in user.warehouse_ids ]), ('location_dest_id', 'in', [ p.id for p in user.warehouse_ids ])]</field>
+        </record>
+
+    </data>
+</openerp>

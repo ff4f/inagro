@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+	<template id="report_asset_document">
+		<t t-call="web.html_container">
+			<t t-call="web.external_layout">
+				<t t-set="doc"
+					t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+				<div class="page">
+					<div class="oe_structure" />
+					<left>
+						<h2>
+							<strong>
+								<span t-field="doc.name" />
+							</strong>
+						</h2>
+					</left>
+					<div id="address_informations" class="row mt32 mb32">
+						<div class="col-6">
+
+							<table border="0" style="width:100%">
+								<tbody>
+									<tr>
+										<td style="width:20%">
+											<strong>Date</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.date" />
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:20%">
+											<strong>Reference</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.code" />
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:20%">
+											<strong>Vendor</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.partner_id" />
+										</td>
+									</tr>
+									<tr>
+										<td style="width:20%">
+											<strong>Location</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.location_asset_id" />
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+
+						</div>
+						<div class="col-6">
+
+							<table border="0" style="width:100%">
+								<tbody>
+									<tr>
+										<td style="width:30%">
+											<strong>Gross Value</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.value"
+												t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:30%">
+											<strong>Salvage Value</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.salvage_value"
+												t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:30%">
+											<strong>Residual Value</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.value_residual"
+												t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br />
+
+					<h4>Description Information</h4>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="text-center">Computation Method</th>
+								<th class="text-center">Time Method</th>
+								<th class="text-center">Number of Months in a Periode</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<tr>
+								<td class="text-center">
+									<span t-field="doc.method" />
+								</td>
+								<td class="text-center">
+									<span t-field="doc.method_time" />
+								</td>
+								<td class="text-center">
+									<span t-field="doc.method_period" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<br />
+					<h4>Description Board</h4>
+					<table class="table table-sm o_main_table">
+						<thead>
+							<tr>
+								<th class="text-left">
+									<strong>No</strong>
+								</th>
+								<th class="text-left">
+									<strong>Name</strong>
+								</th>
+								<th class="text-center">
+									<strong>Already Depreciated</strong>
+								</th>
+								<th class="text-center">
+									<strong>Current Depreciated</strong>
+								</th>
+								<th class="text-center">
+									<strong>Depreciated Entry</strong>
+								</th>
+								<th class="text-center">
+									<strong>Status</strong>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<t t-set="i" t-value="1" />
+							<tr t-foreach="doc.depreciation_line_ids" t-as="line">
+								<td class="text-center">
+									<span t-esc="i" />
+								</td>
+								<td class="text-left">
+									<span t-field="line.name" />
+								</td>
+								<td class="text-center">
+									<span t-field="line.depreciated_value"
+										t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+								</td>
+								<td class="text-center">
+									<span t-field="line.remaining_value"
+										t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+								</td>
+								<td class="text-center">
+									<span t-field="line.move_id" />
+								</td>
+								<td class="text-center">
+									<span t-field="line.move_id.state" />
+								</td>
+
+								<t t-set="i" t-value="i+1" />
+
+							</tr>
+						</tbody>
+					</table>
+					<br />
+					<table border="0">
+						<thead>
+							<tr>
+								<th class="text-left">
+									<strong>Scan Here</strong>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-center">
+									<img t-if="doc.qr_code"
+										t-att-src="'data:image/png;base64,%s' % to_text(doc.qr_code)"
+										style="max-width:150px;
+                                max-height:150px;
+                                margin-left:8%;
+                                display: block;
+                                        " />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</t>
+		</t>
+	</template>
+
+	<template id="report_asset_label">
+		<div style="width: 32%; display: inline-table; height:14rem;">
+			<table class="table table-bordered mb-0"
+				style="border: 2px solid black;">
+				<tr>
+					<th class="table-active text-center" style="height: 4rem;">
+						<h4><strong t-field="doc.name" /></h4>
+					</th>
+				</tr>
+				<tr>
+					<td style="height: 2rem" class="text-center">
+						<strong t-field="doc.code" />
+					</td>
+				</tr>
+				<tr>
+					<td class="text-center align-middle" style="height: 6rem">
+						<t t-if="doc.code">
+							<img alt="Barcode" t-if="len(doc.code) == 13"
+								t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', doc.code, 600, 150)"
+								style="width:100%;height::4rem;" />
+							<img alt="Barcode" t-elif="len(doc.code) == 8"
+								t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN8', doc.code, 600, 150)"
+								style="width:100%;height::4rem;" />
+							<img alt="Barcode" t-else=""
+								t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', doc.code, 600, 150)"
+								style="width:100%;height::4rem;" />
+
+						</t>
+						<t t-else="">
+							<span class="text-muted">No reference available</span>
+						</t>
+					</td>
+				</tr>
+				<tr>
+					<td class="text-center align-middle" style="height: 6rem">
+						<img t-if="doc.qr_code"
+							t-att-src="'data:image/png;base64,%s' % to_text(doc.qr_code)"
+							style="max-width:125px;
+                                max-height:125px;
+                                display: block;
+                                        " />
+                                        <img t-else="">
+                                        <span class="text-muted">No QRcode available</span>
+                                        </img>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</template>
+
+
+
+	<template id="asset_report">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="inagro_asset.report_asset_document"
+					t-lang="doc.partner_id.lang" />
+			</t>
+		</t>
+	</template>
+
+	<template id="asset_label">
+		<t t-call="web.basic_layout">
+			<div class="page">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="inagro_asset.report_asset_label">
+					</t>
+				</t>
+			</div>
+		</t>
+	</template>
+</odoo>

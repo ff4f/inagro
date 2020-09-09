@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report string="Print Asset"
+			id="action_asset-report" model="account.asset.asset"
+			report_type="qweb-pdf" name="inagro_asset.asset_report"
+			file="inagro_asset.asset_report"
+			print_report_name="'Asset Report'" />
+			
+	<report
+            id="report_asset_label"
+            string="Asset Label (PDF)"
+            model="account.asset.asset"
+            report_type="qweb-pdf"
+            name="inagro_asset.asset_label"
+            file="inagro_asset.asset_label"
+            print_report_name="'Asset Label - %s' % (object.name)"
+        />
+	</data>
+	
+	
+</odoo>

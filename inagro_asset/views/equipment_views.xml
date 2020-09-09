@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="inherit_inagro_maintenance_equipment_view_form" model="ir.ui.view">
+        <field name="name"> inherit.inagro.maintenance.equipment.form</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="inagro_asset_maintenance.maintenance_equipment_view_form_inherit_hr"/>
+        <field name="arch" type="xml">
+
+            <field name="location" position="replace">
+                
+                <field name="location_asset_id" attrs="{'invisible': [('is_asset', '=', False)]}"/>
+            </field>
+            
+        </field>
+	</record>
+        
+</odoo>
+

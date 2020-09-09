@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="inagro_filter_support_user" model="ir.rule">
+		<field name="name">Inagro filter Website Support User</field>
+		<field name="model_id" search="[('model','=','website.support.ticket')]" model="ir.model" />
+		<field name="groups" eval="[(4, ref('website_support.support_staff'))]" />
+		<field name="domain_force">['|',('user_id', '=', user.id),('partner_id','=',user.partner_id.id)]</field>
+		<field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+	</record>
+	
+	<record id="inagro_filter_support_manager" model="ir.rule">
+		<field name="name">Inagro filter Website Support Manager</field>
+		<field name="model_id" search="[('model','=','website.support.ticket')]" model="ir.model" />
+		<field name="groups" eval="[(4, ref('website_support.support_manager'))]" />
+		<field name="domain_force">['|',('department_id.name.manager_id.user_id', '=', user.id),('partner_id','=',user.partner_id.id)]</field>
+	</record>
+
+	<record id="inagro_filter_support_administrator" model="ir.rule">
+		<field name="name">Inagro filter Website Support Administrator</field>
+		<field name="model_id" search="[('model','=','website.support.ticket')]" model="ir.model" />
+		<field name="groups" eval="[(4, ref('inagro_web_support.admin_support'))]" />
+		<field name="domain_force">[(1,'=',1)]</field>
+	</record>
+
+</odoo>

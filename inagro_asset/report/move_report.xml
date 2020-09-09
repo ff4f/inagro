@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="report_asset_move">
+		<t t-call="web.html_container">
+			<t t-call="web.external_layout">
+				<t t-set="doc"
+					t-value="doc.with_context({'lang':doc.create_uid.partner_id.lang})" />
+				<div class="page">
+					<div class="oe_structure" />
+					<left>
+						<h2>
+							<strong>
+								<span t-field="doc.name" />
+							</strong>
+						</h2>
+					</left>
+
+					<div id="address_informations" class="row mt32 mb32">
+						<div class="col-6">
+
+							<table border="0" style="width:100%">
+								<tbody>
+									<tr>
+										<td style="width:30%">
+											<strong>Date Move</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.move_date"
+												t-options='{"format": "dd MMMM yyyy hh:mm"}' />
+											<t t-if="doc.move_date"> <span>WIB </span> </t>
+											<t t-else=""><span></span></t>
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:30%">
+											<strong>Asset Name</strong>
+										</td>
+										<td style="width:5%">:</td>
+										<td>
+											<span t-field="doc.asset_id" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br />
+					<h3>Movement Information</h3>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="text-center">Source Location</th>
+								<th class="text-center">Destination Location</th>
+								<th class="text-center">PIC</th>
+								<th class="text-center">State</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+							<tr>
+								<td class="text-center">
+									<span t-field="doc.from_loc_id" />
+								</td>
+								<td class="text-center">
+									<span t-field="doc.to_loc_id" />
+								</td>
+								<td class="text-center">
+									<span t-field="doc.write_uid" />
+								</td>
+								<td class="text-center">
+									<span t-field="doc.state" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<br />
+					<table border="0">
+						<thead>
+							<tr>
+								<th class="text-left">
+									<strong>Scan Here</strong>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-center">
+									<img t-if="doc.qr_code"
+										t-att-src="'data:image/png;base64,%s' % to_text(doc.qr_code)"
+										style="max-width:250px;
+                                max-height:250px;
+                                margin-left:8%;
+                                display: block;
+                                        " />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+
+				</div>
+			</t>
+		</t>
+	</template>
+
+	<template id="move_report">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="inagro_asset.report_asset_move"
+					t-lang="doc.create_uid.partner_id.lang" />
+			</t>
+		</t>
+	</template>
+
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- <data noupdate="1"> -->
+    <data>
+
+        <!-- Sequences for asset move -->
+        <record id="seq_asset_move" model="ir.sequence">
+            <field name="name">Asset Move</field>
+            <field name="code">asset.move</field>
+            <field name="prefix">MOV/%(year)s/%(month)s/</field>
+            <field name="padding">3</field>
+        </record>
+        
+        <record id="model_asset_move_action_confirm" model="ir.actions.server">
+            <field name="name">Confirm Move</field>
+            <field name="model_id" ref="inagro_asset.model_asset_move"/>
+            <field name="binding_model_id" ref="model_asset_move"/>
+            <field name="state">code</field>
+            <field name="code">action = records.action_move()</field>
+        </record>
+        
+        <record id="model_asset_move_action_cancel" model="ir.actions.server">
+            <field name="name">Cancel</field>
+            <field name="model_id" ref="inagro_asset.model_asset_move"/>
+         	<field name="binding_model_id" ref="inagro_asset.model_asset_move"/>
+            <field name="state">code</field>
+            <field name="code">action = records.action_cancel()</field>
+        </record>
+
+    </data>
+</odoo>

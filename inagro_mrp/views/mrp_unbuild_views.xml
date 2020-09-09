@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+	<record id="inherit_mrp_unbuild_form_view" model="ir.ui.view">
+            <field name="name">inherit.mrp.unbuild.form</field>
+            <field name="model">mrp.unbuild</field>
+            <field name="inherit_id" ref="mrp.mrp_unbuild_form_view" />
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='location_id']" position="replace">
+            		<field name="location_id" groups="stock.group_stock_multi_locations" domain="[('usage','=','internal')]" readonly="1" />
+            	</xpath>
+
+            	<xpath expr="//field[@name='location_dest_id']" position="replace">
+            		<field name="location_dest_id" groups="stock.group_stock_multi_locations" domain="[('usage','=','internal')]" readonly="1"/>
+            	</xpath>
+            </field>
+        </record>
+
+    </data>
+
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report string="Asset Move Report"
+			id="action_move-report" model="asset.move"
+			report_type="qweb-pdf" name="inagro_asset.move_report"
+			file="inagro_asset.move_report"
+			print_report_name="'Asset Move Report'" />
+	</data>
+</odoo>

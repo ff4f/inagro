@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- <record id="inherit_mrp_production_tree_view" model="ir.ui.view"> 
+			<field name="name">mrp.production.tree.inherit</field> <field name="model">mrp.production</field> 
+			<field name="type">tree</field> <field name="inherit_id" ref="mrp.mrp_production_tree_view"/> 
+			<field name="arch" type="xml"> <xpath expr="/tree/field[@name='name']" position="replace"> 
+			<field name="sequence_char" /> </xpath> </field> </record> -->
+		<record id="inherit_mrp_production_form_view"
+			model="ir.ui.view">
+			<field name="name">mrp.production.form.inherit</field>
+			<field name="model">mrp.production</field>
+			<field name="inherit_id" ref="mrp.mrp_production_form_view" />
+			<field name="arch" type="xml">
+				<!-- <xpath expr="//field[@name='product_id']" position="before"> <field 
+					name="sequence_char" /> </xpath> -->
+			<xpath expr="//form/header" position="replace">
+			<header>
+                    <field name="consumed_less_than_planned" invisible="1"/>
+                    <button name="button_mark_done" attrs="{'invisible': ['|', ('check_to_done', '=', False), ('consumed_less_than_planned', '=', True)]}" string="Mark as Done" type="object" class="oe_highlight"/>
+                    <button name="button_mark_done" attrs="{'invisible': ['|', ('check_to_done', '=', False), ('consumed_less_than_planned', '=', False)]}" string="Mark as Done" type="object" class="oe_highlight" confirm="You have consumed less material than what was planned. Are you sure you want to close this MO?"/>
+                    <button name="action_assign" attrs="{'invisible': ['|', ('availability', 'in', ('assigned', 'none')), ('is_locked', '=', False)]}" string="Check availability" type="object" class="oe_highlight"/>
+                    <button name="button_plan" attrs="{'invisible': ['|', '|', ('state', '!=', 'confirmed'), ('routing_id', '=', False), ('is_locked', '=', False)]}" type="object" string="Create Workorders" class="oe_highlight"/>
+                    <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', '&amp;', ('is_locked', '=', False), ('check_to_done', '=', True), ('state', '!=', 'confirmed'), ('routing_id', '!=', False),('availability', '!=', 'assigned')]}" string="Produce" type="object" class="oe_highlight"/>
+                   <!--  <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', '|', ('is_locked', '=', False), ('check_to_done', '=', True), ('state', 'not in', ('confirmed','progress')), ('routing_id', '!=', False), ('availability', '!=', 'assigned')]}" string="Produce" type="object"/> -->
+                    <button name="post_inventory" string="Post Inventory" type="object" attrs="{'invisible': [('post_visible', '=', False)]}" groups="base.group_no_one"/>
+                    <button name="action_cancel" type="object" string="Cancel" attrs="{'invisible': ['|', '|', ('is_locked', '=', False), ('state', 'in', ('done','cancel')), ('check_to_done', '=', True)]}"/>
+                    <button name="button_scrap" type="object" string="Scrap" attrs="{'invisible': ['|', '|', ('availability', '=', 'none'), ('state', 'in', ('cancel')), ('is_locked', '=', False)]}"/>
+                    <button name="button_unreserve" type="object" string="Unreserve" attrs="{'invisible': [('unreserve_visible', '=', False)]}"/>
+                    <span class="badge badge-danger" attrs="{'invisible': ['|',('availability', 'in', ('assigned', 'none')), ('state', 'not in', ('confirmed','progress'))]}">Raw materials not available!</span>
+                    <field name="state" widget="statusbar" statusbar_visible="confirmed,progress,done"/>
+                    <button name="action_toggle_is_locked" attrs="{'invisible': ['|', '|', ('state', '=', 'cancel'), ('id', '=', False), ('is_locked', '=', False)]}" string="Unlock" groups="mrp.group_mrp_manager" type="object" help="Unlock the manufacturing order to correct what has been consumed or produced."/>
+                    <button name="action_toggle_is_locked" attrs="{'invisible': [('is_locked', '=', True)]}" string="Lock" class="oe_highlight" groups="mrp.group_mrp_manager" type="object"/>
+                </header>
+				</xpath>
+				<xpath expr="//field[@name='product_uom_qty']"
+					position="replace">
+					<field name="product_uom_qty" />
+				</xpath>
+				<xpath expr="//field[@name='reserved_availability']"
+					position="replace">
+					<field name="reserved_availability" />
+				</xpath>
+				<xpath expr="//field[@name='quantity_done']"
+					position="replace">
+					<field name="quantity_done" />
+				</xpath>
+
+				<xpath expr="//form/sheet/notebook/page[3]" position="replace">
+					<page string="Miscellaneous"
+						groups="stock.group_stock_multi_locations, base.group_no_one">
+						<group>
+							<group groups="stock.group_stock_multi_locations">
+								<field name="picking_type_id"
+									domain="[('code', '=', 'mrp_operation')]"
+									attrs="{'readonly': [('has_moves', '=', True)]}" />
+								<field name="location_src_id"
+									domain="[('usage','=','internal')]" readonly="1" force_save="1" />
+								<field name="location_dest_id"
+									domain="[('usage','=','internal')]" readonly="1" force_save="1" />
+							</group>
+							<group>
+								<field name="availability" groups="base.group_no_one" />
+							</group>
+						</group>
+					</page>
+				</xpath>
+				
+				
+			</field>
+		</record>
+
+		<record id="inherit_mrp_bom_line_view" model="ir.ui.view">
+			<field name="name">mrp.bom.line.view.form.inherit</field>
+			<field name="model">mrp.bom.line</field>
+			<field name="inherit_id" ref="mrp.mrp_bom_line_view_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='product_qty']" position="replace">
+					<field name="product_qty" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="inherit_mrp_bom_view" model="ir.ui.view">
+			<field name="name">mrp.bom.view.form.inherit</field>
+			<field name="model">mrp.bom</field>
+			<field name="inherit_id" ref="mrp.mrp_bom_form_view" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='type']" position="after">
+					<field name="picking_id" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="inherit_mrp_product_produce_wizard"
+			model="ir.ui.view">
+			<field name="name">mrp.product.produce.wizard.inherit</field>
+			<field name="model">mrp.product.produce</field>
+			<field name="inherit_id"
+				ref="mrp.view_mrp_product_produce_wizard" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='qty_to_consume']"
+					position="replace">
+					<field name="qty_to_consume" readonly="1" />
+				</xpath>
+				<xpath expr="//field[@name='qty_reserved']" position="replace">
+					<field name="qty_reserved" readonly="1" />
+				</xpath>
+				<xpath expr="//field[@name='qty_done']" position="replace">
+					<field name="qty_done" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="inherit_mrp_product_produce_wizard"
+			model="ir.ui.view">
+			<field name="name">stock.quant.form.inherit</field>
+			<field name="model">stock.quant</field>
+			<field name="inherit_id" ref="stock.view_stock_quant_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='quantity']" position="replace">
+					<field name="quantity" />
+				</xpath>
+				<xpath expr="//field[@name='reserved_quantity']"
+					position="replace">
+					<field name="reserved_quantity" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="inherit_stock_move_line_form"
+			model="ir.ui.view">
+			<field name="name">stock.move.line.form.inherit</field>
+			<field name="model">stock.move.line</field>
+			<field name="inherit_id" ref="stock.view_move_line_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='product_uom_qty']" position="replace">
+					<field name="product_uom_qty" />
+				</xpath>
+				<xpath expr="//field[@name='qty_done']"
+					position="replace">
+					<field name="qty_done" />
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+
+</odoo>
